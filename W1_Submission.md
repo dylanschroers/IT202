@@ -1,6 +1,6 @@
 <table><tr><td> <em>Assignment: </em> S22-M1-GettingStarted</td></tr>
 <tr><td> <em>Student: </em> Dylan Schroers(djs28)</td></tr>
-<tr><td> <em>Generated: </em> 1/30/2022 5:29:46 PM</td></tr>
+<tr><td> <em>Generated: </em> 1/30/2022 5:52:03 PM</td></tr>
 <tr><td> <em>Grading Link: </em> <a href="https://learn.ethereallab.app/homework/IT202-004-S22/s22-m1-gettingstarted/grade/djs28" target="_blank">Grading</a></table>
 <table><tr><td> <em>Instructions: </em> <ol>
 <li>Create a repository on github, use the format [course]-[section] as the repository name.</li>
