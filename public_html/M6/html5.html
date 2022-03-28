@@ -20,11 +20,11 @@
       }
     }
     // Your score
-    var score = 0;
+    var score;
 
     // Properties for your square
-    var x = 50; // X position
-    var y = 100; // Y position
+    var x; // X position
+    var y; // Y position
     var speed = 6; // Distance to move each frame
     var sideLength = 50; // Length of each side of the square
 
@@ -34,10 +34,18 @@
     var right = false;
     var left = false;
 
-    // Properties for the target square
-    var targetX = 0;
-    var targetY = 0;
-    var targetLength = 25;
+    // Properties for the plus square
+    var plusSquarex = 0;
+    var plusSquareY = 0;
+    var plusSquareLength = 25;
+    // Properties for the minus square
+    var minusSquareX = 0;
+    var minusSquareY = 0;
+    var minusSquareLength = 25;
+    // Properties for the gold square
+    var goldSquareX = 0;
+    var goldSquareY = 0;
+    var goldSquareLength = 25;
 
     // Determine if number a is within the range b to c (exclusive)
     function isWithin(a, b, c) {
@@ -45,7 +53,7 @@
     }
 
     // Countdown timer (in seconds)
-    var countdown = 30;
+    var countdown = 0;
     // ID to track the setTimeout
     var id = null;
 
@@ -107,6 +115,11 @@
     // Start the game
     function startGame() {
       // Reduce the countdown timer ever second
+      x = 50;
+      y = 100;
+
+      score = 0;
+      countdown += 30;
       id = setInterval(function() {
         countdown--;
       }, 1000)
@@ -128,12 +141,27 @@
       context.font = '24px Arial';
       context.textAlign = 'center';
       context.fillText('Final Score: ' + score, canvas.width / 2, canvas.height / 2);
+      context.font = '18px Arial'
+      context.fillText('Click to start again', canvas.width / 2, (canvas.height / 4) * 3);
+      canvas.addEventListener('click',startGame);
     }
 
     // Move the target square to a random position
     function moveTarget() {
-      targetX = Math.round(Math.random() * canvas.width - targetLength);
-      targetY = Math.round(Math.random() * canvas.height - targetLength)
+      plusSquareX = Math.round(Math.random() * canvas.width - plusSquareLength);
+      plusSquareY = Math.round(Math.random() * canvas.height - plusSquareLength);
+
+      minusSquareX = Math.round(Math.random() * canvas.width - minusSquareLength);
+      minusSquareY = Math.round(Math.random() * canvas.height - minusSquareLength);
+
+      goldSquareX = -100;
+      goldSquareY = -100;
+      
+      if (Math.floor(Math.random() * 5) == 0) {
+        goldSquareX = Math.round(Math.random() * canvas.width - goldSquareLength);
+        goldSquareY = Math.round(Math.random() * canvas.height - goldSquareLength);
+      }
+      
     }
 
     // Clear the canvas
@@ -172,20 +200,42 @@
         x = canvas.width - sideLength;
       }
       // Collide with the target
-      if (isWithin(targetX, x, x + sideLength) || isWithin(targetX + targetLength, x, x + sideLength)) { // X
-        if (isWithin(targetY, y, y + sideLength) || isWithin(targetY + targetLength, y, y + sideLength)) { // Y
+      if (isWithin(plusSquareX, x, x + sideLength) || isWithin(plusSquareX + plusSquareLength, x, x + sideLength)) { // X
+        if (isWithin(plusSquareY, y, y + sideLength) || isWithin(plusSquareY + plusSquareLength, y, y + sideLength)) { // Y
           // Respawn the target
           moveTarget();
           // Increase the score
           score++;
         }
       }
+      if (isWithin(minusSquareX, x, x + sideLength) || isWithin(minusSquareX + minusSquareLength, x, x + sideLength)) { // X
+        if (isWithin(minusSquareY, y, y + sideLength) || isWithin(minusSquareY + minusSquareLength, y, y + sideLength)) { // Y
+          // Respawn the target
+          moveTarget();
+          // Increase the score
+          score--;
+        }
+      }
+      if (isWithin(goldSquareX, x, x + sideLength) || isWithin(goldSquareX + goldSquareLength, x, x + sideLength)) { // X
+        if (isWithin(goldSquareY, y, y + sideLength) || isWithin(goldSquareY + goldSquareLength, y, y + sideLength)) { // Y
+          // Respawn the target
+          moveTarget();
+          // Increase the score
+          score+=3;
+        }
+      }
       // Draw the square
-      context.fillStyle = '#FF0000';
+      context.fillStyle = '#000000';
       context.fillRect(x, y, sideLength, sideLength);
-      // Draw the target 
+      // Draw the plus square 
       context.fillStyle = '#00FF00';
-      context.fillRect(targetX, targetY, targetLength, targetLength);
+      context.fillRect(plusSquareX, plusSquareY, plusSquareLength, plusSquareLength);
+      // Draw the minus square
+      context.fillStyle = '#FF0000';
+      context.fillRect(minusSquareX, minusSquareY, minusSquareLength, minusSquareLength);
+      // Draw the gold square
+      context.fillStyle = '#FFD700';
+      context.fillRect(goldSquareX, goldSquareY, goldSquareLength, goldSquareLength);
       // Draw the score and time remaining
       context.fillStyle = '#000000';
       context.font = '24px Arial';
