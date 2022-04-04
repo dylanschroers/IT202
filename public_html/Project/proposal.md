@@ -17,13 +17,13 @@
 ### Proposal Checklist and Evidence
 
 - Milestone 1
-    - [ ] \(mm/dd/yyyy of completion) User will be able to register a new account
+    - [x] \(05/11/2022 of completion) User will be able to register a new account
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/register.php](https://djs28-dev.herokuapp.com/Project/register.php)
-    - [ ] \(mm/dd/yyyy of completion) User will be able to login to their account (given they enter the correct credentials)
+    - [x] \(05/11/2022 of completion) User will be able to login to their account (given they enter the correct credentials)
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/login.php](https://djs28-dev.herokuapp.com/Project/login.php))
-    - [ ] \(mm/dd/yyyy of completion) User will be able to logout
+    - [x] \(05/11/2022 of completion) User will be able to logout
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
     - [ ] \(mm/dd/yyyy of completion) Basic security rules implemented
