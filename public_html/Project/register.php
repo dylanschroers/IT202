@@ -1,10 +1,38 @@
 <?php
 require(__DIR__ . "/../../partials/nav.php");
+session_unset();
+session_destroy();
+session_start();
+function users_check_duplicate($errorInfo)
+{
+    if ($errorInfo[1] === 1062) {
+        //https://www.php.net/manual/en/function.preg-match.php
+        //NOTE: this assumes your table name is `Users`, edit it accordingly
+        preg_match("/Users.(\w+)/", $errorInfo[2], $matches);
+        if (isset($matches[1])) {
+            flash("The chosen " . $matches[1] . " is not available.", "warning");
+        } else {
+            //TODO come up with a nice error message
+            flash("An unhandled error occurs", "danger");
+            //this will log the output to the terminal/console that's running the php server
+            error_log(var_export($errorInfo, true));
+        }
+    } else {
+        //TODO come up with a nice error message
+        flash("An unhandled error occurs", "danger");
+        //this will log the output to the terminal/console that's running the php server
+        error_log(var_export($errorInfo, true));
+    }
+}
 ?>
 <form onsubmit="return validate(this)" method="POST">
     <div>
         <label for="email">Email</label>
         <input type="email" name="email" required />
+    </div>
+    <div>
+        <label for="username">Username</label>
+        <input type="text" name="username" required maxlength="30" />
     </div>
     <div>
         <label for="pw">Password</label>
@@ -20,79 +48,63 @@ require(__DIR__ . "/../../partials/nav.php");
     function validate(form) {
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
-    let x = document.forms[form]["email"].value;
-        if (x == "") {
-            alert("Name must be filled out");
-            return false;
-        }
-        else return true;
-    let y = document.forms[form]["password"].value;
-        if (y == "") {
-            alert("Password must be filled out");
-            return false;
-        }
-        else return true;
-    let z = document.forms[form]["confirm"].value;
-    if (z == "") {
-        alert("Confirm must be filled out");
-        return false;
+
+        return true;
     }
-        else return true;
-    }
+    
 </script>
 <?php
 //TODO 2: add PHP Code
-if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"])) {
+if (isset($_POST["email"]) && isset($_POST["password"]) && isset($_POST["confirm"]) && isset($_POST["username"])) {
     $email = se($_POST, "email", "", false);
     $password = se($_POST, "password", "", false);
-    $confirm = se(
-        $_POST,
-        "confirm",
-        "",
-        false
-    );
+    $confirm = se($_POST, "confirm", "", false);
+    $username = se($_POST, "username", "", false);
     //TODO 3
     $hasError = false;
     if (empty($email)) {
-        flash("Email must not be empty");
+        flash("Email must not be empty", "danger");
         $hasError = true;
     }
     //sanitize
     $email = sanitize_email($email);
     //validate
     if (!is_valid_email($email)) {
-        flash("Invalid email address");
+        flash("Invalid email address", "danger");
+        $hasError = true;
+    }
+    if (!is_valid_username($username)) {
+        flash("Username must only contain 3-16 characters a-z, 0-9, _, or -", "danger");
         $hasError = true;
     }
     if (empty($password)) {
-        flash("password must not be empty");
+        flash("password must not be empty", "danger");
         $hasError = true;
     }
     if (empty($confirm)) {
-        flash("Confirm password must not be empty");
+        flash("Confirm password must not be empty", "danger");
         $hasError = true;
     }
-    if (strlen($password) < 8) {
-        flash("Password too short");
+    if (!is_valid_password($password)) {
+        flash("Password too short", "danger");
         $hasError = true;
     }
     if (
         strlen($password) > 0 && $password !== $confirm
     ) {
-        flash("Passwords must match");
+        flash("Passwords must match", "danger");
         $hasError = true;
     }
     if (!$hasError) {
         //TODO 4
         $hash = password_hash($password, PASSWORD_BCRYPT);
         $db = getDB();
-        $stmt = $db->prepare("INSERT INTO Users (email, password) VALUES(:email, :password)");
+        $stmt = $db->prepare("INSERT INTO Users (email, password, username) VALUES(:email, :password, :username)");
         try {
-            $stmt->execute([":email" => $email, ":password" => $hash]);
-            flash("Successfully registered!");
+            $stmt->execute([":email" => $email, ":password" => $hash, ":username" => $username]);
+            flash("Successfully registered!", "success");
         } catch (Exception $e) {
-            flash("There was a problem registering");
-            flash("<pre>" . var_export($e, true) . "</pre>");
+            users_check_duplicate($e->errorInfo);
         }
     }
 }
