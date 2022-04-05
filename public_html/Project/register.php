@@ -20,8 +20,24 @@ require(__DIR__ . "/../../partials/nav.php");
     function validate(form) {
         //TODO 1: implement JavaScript validation
         //ensure it returns false for an error and true for success
-
-        return true;
+    let x = document.forms[form]["email"].value;
+        if (x == "") {
+            alert("Name must be filled out");
+            return false;
+        }
+        else return true;
+    let y = document.forms[form]["password"].value;
+        if (y == "") {
+            alert("Password must be filled out");
+            return false;
+        }
+        else return true;
+    let z = document.forms[form]["confirm"].value;
+    if (z == "") {
+        alert("Confirm must be filled out");
+        return false;
+    }
+        else return true;
     }
 </script>
 <?php

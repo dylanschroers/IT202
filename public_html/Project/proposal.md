@@ -17,32 +17,32 @@
 ### Proposal Checklist and Evidence
 
 - Milestone 1
-    - [x] \(05/11/2022 of completion) User will be able to register a new account
+    - [x] \(03/11/2022 of completion) User will be able to register a new account
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/register.php](https://djs28-dev.herokuapp.com/Project/register.php)
-    - [x] \(05/11/2022 of completion) User will be able to login to their account (given they enter the correct credentials)
+    - [x] \(03/11/2022 of completion) User will be able to login to their account (given they enter the correct credentials)
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/login.php](https://djs28-dev.herokuapp.com/Project/login.php))
-    - [x] \(05/11/2022 of completion) User will be able to logout
+    - [x] \(03/11/2022 of completion) User will be able to logout
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
-    - [ ] \(mm/dd/yyyy of completion) Basic security rules implemented
+    - [x] \(4/4/2022 of completion) Basic security rules implemented
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
-    - [ ] \(mm/dd/yyyy of completion) Basic Roles implemented
+    - [x] \(4/4/2022 of completion) Basic Roles implemented
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/admin/create_role.php](https://djs28-dev.herokuapp.com/Project/admin/create_role.php)
-    - [ ] \(mm/dd/yyyy of completion) Site should have basic styles/theme applied; everything should be styled
+    - [x] \(4/4/2022 of completion) Site should have basic styles/theme applied; everything should be styled
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)-  
     -  [https://djs28-dev.herokuapp.com/Project/home.php](https://djs28-dev.herokuapp.com/Project/home.php)
     -  [https://djs28-dev.herokuapp.com/Project/styles.css](https://djs28-dev.herokuapp.com/Project/styles.css)
-    - [ ] \(mm/dd/yyyy of completion) Any output messages/errors should be “user friendly”
+    - [x] \(4/4/2022 of completion) Any output messages/errors should be “user friendly”
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
-    - [ ] \(mm/dd/yyyy of completion) User will be able to see their profile
+    - [x] \(4/4/2022 of completion) User will be able to see their profile
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
-    - [ ] \(mm/dd/yyyy of completion) User will be able to edit their profile
+    - [x] \(4/4/2022 of completion) User will be able to edit their profile
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
 - Milestone 2
