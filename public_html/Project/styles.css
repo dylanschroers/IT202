@@ -1,0 +1,45 @@
+.alert-success {
+    background-color: red;
+    color: black;
+    text-align: center
+}
+
+.alert-warning {
+    color: black;
+    background-color: yellow;
+}
+
+.alert-danger {
+    color: black;
+    background-color: red;
+}
+
+.alert-info {
+    background-color: red;
+    color: black;
+    text-align: center
+
+}
+nav li{
+    display: inline-block; 
+    background-color: rgb(73, 37, 161); 
+    padding: 10px;
+    border-radius: 30%;
+    filter: drop-shadow(3px 3px red);
+    text-align: center;
+    margin-top: 100px;
+    margin-bottom: 100px;
+    margin-right: 25px;
+}
+nav li a{
+    color: hotpink
+}
+input{
+    border-radius: 20%;
+}
+body{
+    padding: 25px;
+    background-color: rgb(219, 207, 250);
+    font-family: Arial;
+    color: rgb(88, 23, 255);
+}
