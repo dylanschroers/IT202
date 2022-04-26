@@ -30,6 +30,7 @@ require_once(__DIR__ . "/../lib/functions.php");
     <ul>
         <?php if (is_logged_in()) : ?>
             <li><a href="home.php">Home</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
         <?php endif; ?>
 
         <?php if (!is_logged_in()) : ?>
@@ -52,7 +53,9 @@ require_once(__DIR__ . "/../lib/functions.php");
             <li><a href="profile.php">Profile</a></li>
         <?php endif; ?>
     </ul>
+    <!--
     <span class="navbar-text show-balance">
         Test Placeholder, should get replaced if balance.php loads and works
     </span>
+    -->
 </nav>

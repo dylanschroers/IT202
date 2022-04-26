@@ -3,9 +3,9 @@ CREATE TABLE IF NOT EXISTS `Accounts` (
     `account_number` varchar(12) unique,
     `user_id` int,
     `account_type` varchar(100),
-    `balance` int DEFAULT 0,
+    `balance` decimal(20,2) DEFAULT 0,
     `created` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     `modified` TIMESTAMP DEFAULT CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
     FOREIGN KEY (`user_id`) REFERENCES Users(`id`),
-    check (`balance` >= 0 AND LENGTH(`account`) = 12)
+    check (LENGTH(`account_number`) = 12)
 )

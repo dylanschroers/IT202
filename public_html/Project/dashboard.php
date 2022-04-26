@@ -16,9 +16,10 @@ if (is_logged_in()) {
 require(__DIR__ . "/../../partials/flash.php");
 ?>
 <?php if (is_logged_in()) : ?>
-    <li><a href="#">Create Account</a></li>
-    <li><a href="#">My Accounts</a></li>
-    <li><a href="#">Deposits</a></li>
-    <li><a href="#">Withdraw Transfer</a></li>
+    <li><a href="create_account.php">Create Account</a></li>
+    <li><a href="get_accounts.php">My Accounts</a></li>
+    <li><a href="deposit.php">Deposits</a></li>
+    <li><a href="withdraw.php">Withdraw</a></li>
+    <li><a href="#">Transfer</a></li>
     <li><a href="profile.php">Profile</a></li>
 <?php endif; ?>

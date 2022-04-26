@@ -13,7 +13,7 @@ function get_or_create_account()
         //id is for internal references, account_number is user facing info, and balance will be a cached value of activity
         $account = ["id" => -1, "account_number" => false, "balance" => 0];
         //this should always be 0 or 1, but being safe
-        $query = "SELECT id, account, balance from RM_Accounts where user_id = :uid LIMIT 1";
+        $query = "SELECT id, account, balance from Accounts where user_id = :uid LIMIT 1";
         $db = getDB();
         $stmt = $db->prepare($query);
         try {
@@ -23,7 +23,7 @@ function get_or_create_account()
                 //account doesn't exist, create it
                 try {
                     //my table should automatically create the account number so I just need to assign the user
-                    $query = "INSERT INTO RM_Accounts (user_id) VALUES (:uid)";
+                    $query = "INSERT INTO Accounts (user_id, account_type, account_number) VALUES (:uid, :accType, NULL)";
                     $user_id = get_user_id(); //caching a reference
                     $stmt = $db->prepare($query);
                     $stmt->execute([":uid" => $user_id]);
@@ -31,6 +31,8 @@ function get_or_create_account()
                     $account["id"] = $db->lastInsertId();
                     //this should mimic what's happening in the DB without requiring me to fetch the data
                     $account["account_number"] = str_pad($account["id"], 12, "0", STR_PAD_LEFT);
+                    $query = "UPDATE Accounts SET account_number = :account_number where id = :id";
+
                 } catch (PDOException $e) {
                     flash("An error occurred while creating your account", "danger");
                     error_log(var_export($e, true));
