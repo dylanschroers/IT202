@@ -20,6 +20,6 @@ require(__DIR__ . "/../../partials/flash.php");
     <li><a href="get_accounts.php">My Accounts</a></li>
     <li><a href="deposit.php">Deposits</a></li>
     <li><a href="withdraw.php">Withdraw</a></li>
-    <li><a href="#">Transfer</a></li>
+    <li><a href="transfers.php">Transfer</a></li>
     <li><a href="profile.php">Profile</a></li>
 <?php endif; ?>

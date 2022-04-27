@@ -16,9 +16,20 @@
     $accHist = [];
     if (isset($_POST["save"])) {
         $accNum = se($_POST, "accNum", null, false);
-        $stmt = $db->prepare("SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, created from Transactions where account_src = :id LIMIT 10");
-        try {
+        $typeFilter = se($_POST, "typeFilter", null, false);
+        
+        if ($typeFilter != NULL) {
+            $stmt = $db->prepare("SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, 
+            created from Transactions where account_src = :id and transaction_type = :fil ORDER BY created DESC LIMIT 10"); 
+            $stmt->execute([":id" => $accNum, ":fil" => $typeFilter]);   
+        } 
+        else {
+            $stmt = $db->prepare("SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, created 
+            from Transactions where account_src = :id ORDER BY created DESC LIMIT 10");
             $stmt->execute([":id" => $accNum]);
+
+        }
+        try {
             $accHist = $stmt->fetchall(PDO::FETCH_ASSOC);
         } catch (Exception $e) {
             error_log(var_export($e,true));
@@ -55,6 +66,16 @@
     <div class="mb-3">
         <label for="al" class="form-label">Accounts</label>
         <select id="al" name="accNum" class="form-control">
+            <?php foreach ($accounts as $al) : ?>
+                <option>
+                    <?php se($al, 'account_number'); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="typeFilter" class="form-label">Accounts</label>
+        <select id="typeFilter" name="typeFilter" class="form-control">
             <?php foreach ($accounts as $al) : ?>
                 <option>
                     <?php se($al, 'account_number'); ?>
