@@ -17,38 +17,61 @@ try {
 
 if (isset($_POST["save"])) {
     $accNum = se($_POST, "accNum", null, false);
-    $deposit = se($_POST, "deposit", null, false);
+    $withdraw = se($_POST, "withdraw", null, false);
     $memo = se($_POST, "memo", null, false);
 
     try {
+        $query = "SELECT balance from Accounts WHERE id = :aid";
+        $stmt = $db->prepare($query);
+        $stmt->execute(["aid" => $accNum]);
+        $account = $stmt->fetch(PDO::FETCH_ASSOC);
+        $b = (int)se($account, "balance", 0, false);
+
+        if ($b < $withdraw) {
+            flash("Cannot withdraw more than the account holds");
+        }
+        else {
         $id = $db->lastInsertId();
         //this should mimic what's happening in the DB without requiring me to fetch the data
         
-        //deposit
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
+        //world account
+        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
         $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => "-1", ":accDest" => $accNum, ":balC" => $deposit, ":tranType" => "Withdraw", ":mem" => $memo, ":exTot" => $deposit]);
-
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => $accNum, ":accDest" => "-1", ":balC" => -1*$deposit, ":tranType" => "Withdraw",":mem" => $memo, ":exTot" => -1*$deposit]);
-        
-        //updates accounts table balance
-        
-        $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
-        from Transactions WHERE account_src = :src) where id = :src";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":src" => $accNum]);
+        $stmt->execute([":accSrc" => "-1", ":accDest" => $accNum, ":balC" => $withdraw, ":tranType" => "Withdraw", ":mem" => $memo]);
+        $id = $db->lastInsertId();
 
         $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
         from Transactions WHERE account_src = :src) where id = :src";
         $stmt = $db->prepare($query);
         $stmt->execute([":src" => "-1"]);
+
+        $query = "UPDATE Transactions SET expected_total = (SELECT balance from Accounts WHERE id = :aid) where id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->execute(["aid" => "-1", "id" => $id]);
+
+        //user account
+        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
+        $stmt = $db->prepare($query);
+        $stmt->execute([":accSrc" => $accNum, ":accDest" => "-1", ":balC" => -1*$withdraw, ":tranType" => "Withdraw",":mem" => $memo]);
+        $id = $db->lastInsertId();
+
+        $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
+        from Transactions WHERE account_src = :src) where id = :src";
+        $stmt = $db->prepare($query);
+        $stmt->execute([":src" => $accNum]);
+
         
+        $query = "UPDATE Transactions SET expected_total = (SELECT balance from Accounts WHERE id = :aid) where id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->execute(["aid" => $accNum, "id" => $id]);
+        //updates accounts table balance
+        
+
         flash("Your withdraw was successful", "success");
         /*
         die(header("Location: $BASE_PATH" . "/get_accounts.php"));
         */
+        }
 
     } catch (PDOException $e) {
         flash("An error occurred while withdrawing from your account", "danger");
@@ -59,8 +82,8 @@ if (isset($_POST["save"])) {
 
 <script>
     function validate(form) {
-        let acc = form.al.value;
-        let dep = form.deposit.value;
+        let acc = form.accNum.value;
+        let wit = form.withdraw.value;
         let isValid = true;
         //TODO add other client side validation....
 
@@ -68,12 +91,12 @@ if (isset($_POST["save"])) {
         //find the flash container, create a new element, appendChild
 
         if (!(acc)) {
-            flash("Account must not be empty", "warning");
+            alert("Account must not be empty", "warning");
             isValid = false;
         }
 
-        if (!(dep > 0)) {
-            flash("Deposit must be greater than 0", "warning");
+        if (!(wit > 0)) {
+            alert("Withdraw must be greater than 0");
             isValid = false;
         }
         return isValid;
@@ -90,8 +113,8 @@ if (isset($_POST["save"])) {
         </select>
     </div>
     <div class="mb-3">
-        <label for="deposit">Withdraw</label>
-        <input type="number" name="deposit" id="deposit" value="<?php se("5"); ?>" />
+        <label for="withdraw">Withdraw</label>
+        <input type="number" name="withdraw" id="withdraw" value="<?php se("5"); ?>" />
     </div>
     <div class="mb-3">
         <label for="memo">Memo</label>

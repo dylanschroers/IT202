@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . "/../lib/functions.php");
+
 //Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
@@ -26,6 +28,7 @@ require_once(__DIR__ . "/../lib/functions.php");
 <head>
     <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
 </head>
+<script src="<?php echo get_url('helpers.js'); ?>"></script>
 <nav>
     <ul>
         <?php if (is_logged_in()) : ?>

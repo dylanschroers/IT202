@@ -24,26 +24,44 @@ if (isset($_POST["save"])) {
         $id = $db->lastInsertId();
         //this should mimic what's happening in the DB without requiring me to fetch the data
         
-        //deposit
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => "-1", ":accDest" => $accNum, ":balC" => -1*$deposit, ":tranType" => "Deposit", ":mem" => $memo, ":exTot" => -1*$deposit]);
 
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
+        //world account
+        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
+        VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
         $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => $accNum, ":accDest" => "-1", ":balC" => $deposit, ":tranType" => "Deposit", ":mem" => $memo, ":exTot" => $deposit]);
-
-        //updates accounts table balance
-        
-        $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
-        from Transactions WHERE account_src = :src) where id = :src";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":src" => $accNum]);
+        $stmt->execute([":accSrc" => "-1", ":accDest" => $accNum, ":balC" => -1*$deposit, ":tranType" => "Deposit", ":mem" => $memo]);
+        $id = $db->lastInsertId();
 
         $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
         from Transactions WHERE account_src = :src) where id = :src";
         $stmt = $db->prepare($query);
         $stmt->execute([":src" => "-1"]);
+
+        $query = "UPDATE Transactions SET expected_total = (SELECT IFNULL(SUM(balance), 0) from Accounts WHERE id = :aid) where id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->execute(["aid" => "-1", "id" => $id]);
+        
+        //user account
+        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
+        VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
+        $stmt = $db->prepare($query);
+        $stmt->execute([":accSrc" => $accNum, ":accDest" => "-1", ":balC" => $deposit, ":tranType" => "Deposit", ":mem" => $memo, ":exTot" => $deposit]);
+        $id = $db->lastInsertId();
+
+        $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
+        from Transactions WHERE account_src = :src) where id = :src";
+        $stmt = $db->prepare($query);
+        $stmt->execute([":src" => $accNum]);
+
+        $query = "UPDATE Transactions SET expected_total = (SELECT IFNULL(SUM(balance), 0) from Accounts WHERE id = :aid) where id = :id";
+        $stmt = $db->prepare($query);
+        $stmt->execute(["aid" => $accNum, "id" => $id]);
+        //updates accounts table balance
+        
+        
+
+        
+
         flash("Your deposit was successful", "success");
         /*
         die(header("Location: $BASE_PATH" . "/get_accounts.php"));
@@ -58,7 +76,7 @@ if (isset($_POST["save"])) {
 
 <script>
     function validate(form) {
-        let acc = form.al.value;
+        let acc = form.accNum.value;
         let dep = form.deposit.value;
         let isValid = true;
         //TODO add other client side validation....
@@ -71,8 +89,8 @@ if (isset($_POST["save"])) {
             isValid = false;
         }
 
-        if (!(dep > 0)) {
-            flash("Deposit must be greater than 0", "warning");
+        if (!(dep > 1)) {
+            flash("Deposit must be greater than 1", "warning");
             isValid = false;
         }
         return isValid;
