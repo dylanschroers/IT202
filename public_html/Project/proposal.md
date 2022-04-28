@@ -31,7 +31,7 @@
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
     - [x] \(4/4/2022 of completion) Basic Roles implemented
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
-    -  [https://djs28-dev.herokuapp.com/Project/admin/create_role.php](https://djs28-dev.herokuapp.com/Project/admin/create_role.php)
+    -  [https://djs28-dev.herokuapp.com/Project/create_role.php](https://djs28-dev.herokuapp.com/Project/admin/create_role.php)
     - [x] \(4/4/2022 of completion) Site should have basic styles/theme applied; everything should be styled
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)-  
     -  [https://djs28-dev.herokuapp.com/Project/home.php](https://djs28-dev.herokuapp.com/Project/home.php)
@@ -46,7 +46,15 @@
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
 - Milestone 2
-  - (duplicate template here for Milestone 1 features)
+  - [ ] \(mm/dd/yyyy) Create the Accounts table (id, account_number [unique, always 12 characters], user_id, balance (default 0), account_type, created, modified)
+  - [ ] \(mm/dd/yyyy) Create a system user if they don’t exist (this will never be logged into, it’s just to keep things working per system requirements)
+  - [ ] \(mm/dd/yyyy) Create a world account in the Accounts table created below (if it doesn’t exist)
+  - [ ] \(mm/dd/yyyy) Create the Transactions table
+  - [ ] \(mm/dd/yyyy) Dashboard page
+  - [ ] \(mm/dd/yyyy) User will be able to create a checking account
+  - [ ] \(mm/dd/yyyy) User will be able to list their accounts
+  - [ ] \(mm/dd/yyyy) User will be able to click an account for more information (a.k.a Transaction History page)
+  - [ ] \(mm/dd/yyyy) User will be able to deposit/withdraw from their account(s)
 - Milestone 3
   - (duplicate template here for Milestone 1 features)
 - Milestone 4
