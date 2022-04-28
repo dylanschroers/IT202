@@ -40,7 +40,7 @@ if (isset($_POST["save"])) {
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destAcc, ":balC" => -1*$transfer, ":tranType" => "Transfer", ":mem" => $memo]);
+            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destAcc, ":balC" => -1*$transfer, ":tranType" => "Internal Transfer", ":mem" => $memo]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
@@ -56,7 +56,7 @@ if (isset($_POST["save"])) {
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $destAcc, ":accDest" => $srcAcc, ":balC" => $transfer, ":tranType" => "Transfer", ":mem" => $memo, ":exTot" => $transfer]);
+            $stmt->execute([":accSrc" => $destAcc, ":accDest" => $srcAcc, ":balC" => $transfer, ":tranType" => "Internal Transfer", ":mem" => $memo, ":exTot" => $transfer]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 

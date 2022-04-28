@@ -4,6 +4,7 @@
 
     $db = getDB();
     //select fresh data from table
+    $transferType = ["", "Deposit", "Withdraw", "Internal Transfer", "External Transfer"];
     $stmt = $db->prepare("SELECT account_number, account_type, modified, balance from Accounts where user_id = :uid LIMIT 5");
     try {
         $stmt->execute([":uid" => get_user_id()]);
@@ -17,20 +18,35 @@
     if (isset($_POST["save"])) {
         $accNum = se($_POST, "accNum", null, false);
         $typeFilter = se($_POST, "typeFilter", null, false);
-        
-        if ($typeFilter != NULL) {
-            $stmt = $db->prepare("SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, 
-            created from Transactions where account_src = :id and transaction_type = :fil ORDER BY created DESC LIMIT 10"); 
-            $stmt->execute([":id" => $accNum, ":fil" => $typeFilter]);   
-        } 
-        else {
-            $stmt = $db->prepare("SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, created 
-            from Transactions where account_src = :id ORDER BY created DESC LIMIT 10");
-            $stmt->execute([":id" => $accNum]);
+        $srtDate = se($_POST, "srtDate", null, false);
+        $endDate = se($_POST, "endDate", null, false);
 
+        $query = "SELECT account_src, account_dest, balance_change, transaction_type, expected_total, memo, created 
+        from Transactions WHERE 1=1";
+        
+        //$query .= " ";
+        $params = [];
+        if (!empty($accNum)) {
+            $query .= " AND account_src = :id";
+            $params[":id"] = "$accNum";
         }
+        if (!empty($typeFilter)) {
+            $query .= " AND transaction_type = :fil";
+            $params[":fil"] = "$typeFilter";
+        }
+        if (!empty($srtDate) && !empty($endDate)) {
+            $query .= " AND (created > :srt and created < :end)";
+            $params[":srt"] = "$srtDate + 00:00:00";
+            $params[":end"] = "$endDate + 23:59:59";
+        }
+        
+        $stmt = $db->prepare($query);
+        
+
         try {
+            $stmt->execute($params);
             $accHist = $stmt->fetchall(PDO::FETCH_ASSOC);
+            flash("Should've worked =)", "success");
         } catch (Exception $e) {
             error_log(var_export($e,true));
             flash("An unexpected error occurred, please try again", "danger");
@@ -73,16 +89,21 @@
             <?php endforeach; ?>
         </select>
     </div>
+    <!-- filters -->
     <div class="mb-3">
-        <label for="typeFilter" class="form-label">Accounts</label>
+        <label for="typeFilter" class="form-label">Transaction Type</label>
         <select id="typeFilter" name="typeFilter" class="form-control">
-            <?php foreach ($accounts as $al) : ?>
+            <?php foreach ($transferType as $type) : ?>
                 <option>
-                    <?php se($al, 'account_number'); ?>
+                    <?php se($type, 'transferType'); ?>
                 </option>
             <?php endforeach; ?>
         </select>
     </div>
+    <input type="date" id="srtDate" name="srtDate">
+    
+    <input type="date" id="endDate" name="endDate">
+
     <input type="submit" value="View History" name="save" />
 </form>
 
