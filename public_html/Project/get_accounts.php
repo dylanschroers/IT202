@@ -39,7 +39,7 @@
             $params[":srt"] = "$srtDate + 00:00:00";
             $params[":end"] = "$endDate + 23:59:59";
         }
-        
+        $query .= " ORDER BY created DESC";
         $stmt = $db->prepare($query);
         
 
