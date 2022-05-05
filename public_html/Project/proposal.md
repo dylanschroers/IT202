@@ -17,26 +17,44 @@
 ### Proposal Checklist and Evidence
 
 - Milestone 1
-    - [ ] \(mm/dd/yyyy of completion) User will be able to register a new account
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) User will be able to login to their account (given they enter the correct credentials)
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) User will be able to logout
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) Basic security rules implemented
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) Basic Roles implemented
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) Site should have basic styles/theme applied; everything should be styled
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) Any output messages/errors should be “user friendly”
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) User will be able to see their profile
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
-    - [ ] \(mm/dd/yyyy of completion) User will be able to edit their profile
-    -  Link to related .md file: [Link Name](link url)- Milestone 2
+    - [x] \(03/11/2022 of completion) User will be able to register a new account
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/register.php](https://djs28-dev.herokuapp.com/Project/register.php)
+    - [x] \(03/11/2022 of completion) User will be able to login to their account (given they enter the correct credentials)
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/login.php](https://djs28-dev.herokuapp.com/Project/login.php))
+    - [x] \(03/11/2022 of completion) User will be able to logout
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
+    - [x] \(4/4/2022 of completion) Basic security rules implemented
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
+    - [x] \(4/4/2022 of completion) Basic Roles implemented
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/create_role.php](https://djs28-dev.herokuapp.com/Project/admin/create_role.php)
+    - [x] \(4/4/2022 of completion) Site should have basic styles/theme applied; everything should be styled
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)-  
+    -  [https://djs28-dev.herokuapp.com/Project/home.php](https://djs28-dev.herokuapp.com/Project/home.php)
+    -  [https://djs28-dev.herokuapp.com/Project/styles.css](https://djs28-dev.herokuapp.com/Project/styles.css)
+    - [x] \(4/4/2022 of completion) Any output messages/errors should be “user friendly”
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
+    - [x] \(4/4/2022 of completion) User will be able to see their profile
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
+    - [x] \(4/4/2022 of completion) User will be able to edit their profile
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
 - Milestone 2
-  - (duplicate template here for Milestone 1 features)
+  - [ ] \(mm/dd/yyyy) Create the Accounts table (id, account_number [unique, always 12 characters], user_id, balance (default 0), account_type, created, modified)
+  - [ ] \(mm/dd/yyyy) Create a system user if they don’t exist (this will never be logged into, it’s just to keep things working per system requirements)
+  - [ ] \(mm/dd/yyyy) Create a world account in the Accounts table created below (if it doesn’t exist)
+  - [ ] \(mm/dd/yyyy) Create the Transactions table
+  - [ ] \(mm/dd/yyyy) Dashboard page
+  - [ ] \(mm/dd/yyyy) User will be able to create a checking account
+  - [ ] \(mm/dd/yyyy) User will be able to list their accounts
+  - [ ] \(mm/dd/yyyy) User will be able to click an account for more information (a.k.a Transaction History page)
+  - [ ] \(mm/dd/yyyy) User will be able to deposit/withdraw from their account(s)
 - Milestone 3
   - (duplicate template here for Milestone 1 features)
 - Milestone 4

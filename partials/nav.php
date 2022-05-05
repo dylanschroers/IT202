@@ -1,4 +1,6 @@
 <?php
+require_once(__DIR__ . "/../lib/functions.php");
+
 //Note: this is to resolve cookie issues with port numbers
 $domain = $_SERVER["HTTP_HOST"];
 if (strpos($domain, ":")) {
@@ -23,17 +25,40 @@ session_start();
 require_once(__DIR__ . "/../lib/functions.php");
 
 ?>
+<head>
+    <link rel="stylesheet" href="styles.css?v=<?php echo time(); ?>">
+</head>
+<script src="<?php echo get_url('helpers.js'); ?>"></script>
 <nav>
     <ul>
         <?php if (is_logged_in()) : ?>
             <li><a href="home.php">Home</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
         <?php endif; ?>
+
         <?php if (!is_logged_in()) : ?>
             <li><a href="login.php">Login</a></li>
             <li><a href="register.php">Register</a></li>
+            
         <?php endif; ?>
+
+        <?php if (has_role("Admin")) : ?>
+            <li><a href="create_roles.php">Create Role</a></li>
+            <li><a href="list_roles.php">List Role</a></li>
+            <li><a href="assign_roles.php">Assign Role</a></li>
+        <?php endif; ?>
+
         <?php if (is_logged_in()) : ?>
             <li><a href="logout.php">Logout</a></li>
         <?php endif; ?>
+
+        <?php if (is_logged_in()) : ?>
+            <li><a href="profile.php">Profile</a></li>
+        <?php endif; ?>
     </ul>
+    <!--
+    <span class="navbar-text show-balance">
+        Test Placeholder, should get replaced if balance.php loads and works
+    </span>
+    -->
 </nav>
