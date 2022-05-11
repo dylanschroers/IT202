@@ -69,7 +69,7 @@ require_once(__DIR__ . "/../../partials/flash.php");
             isValid = false;
         }
 
-        if (!(dep > 5)) {
+        if (!(dep >= 5)) {
             flash("Deposit must be greater than 5", "warning");
             isValid = false;
         }

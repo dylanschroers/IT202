@@ -2,7 +2,6 @@
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 ?>
-<li><a href="ext_transfers.php">External Transfer</a></li>
 <?php
 $db = getDB();
 
@@ -18,7 +17,8 @@ try {
 
 if (isset($_POST["save"])) {
     $srcAcc = se($_POST, "srcAcc", null, false);
-    $destAcc = se($_POST, "destAcc", null, false);
+    $destName = se($_POST, "destName", null, false);
+    $destLastFour = se($_POST, "destAcc", null, false);
     $transfer = se($_POST, "transfer", null, false);
     $memo = se($_POST, "memo", null, false);
 
@@ -32,17 +32,23 @@ if (isset($_POST["save"])) {
         if ($b < $transfer) {
             flash("Cannot transfer more than the account holds");
         }
-        else if ($srcAcc == $destAcc) {}
         else {
             $id = $db->lastInsertId();
             //this should mimic what's happening in the DB without requiring me to fetch the data
             
+            //dest account ID
+            $query = "SELECT Accounts.id FROM Users JOIN Accounts on Accounts.user_id = Users.id 
+            WHERE nameLast = :nmLst AND account_number LIKE :dstLF";
+            $stmt = $db->prepare($query);
+            $stmt->execute([":nmLst" => $destName, ":dstLF" => "%$destLastFour"]);
+            $destAcc = $stmt->fetch(PDO::FETCH_ASSOC);
+            $destID = (int)se($destAcc, "id", 0, false);
 
             //src account
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destAcc, ":balC" => -1*$transfer, ":tranType" => "Internal Transfer", ":mem" => $memo]);
+            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destID, ":balC" => -1*$transfer, ":tranType" => "External Transfer", ":mem" => $memo]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
@@ -58,17 +64,17 @@ if (isset($_POST["save"])) {
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $destAcc, ":accDest" => $srcAcc, ":balC" => $transfer, ":tranType" => "Internal Transfer", ":mem" => $memo, ":exTot" => $transfer]);
+            $stmt->execute([":accSrc" => $destID, ":accDest" => $srcAcc, ":balC" => $transfer, ":tranType" => "External Transfer", ":mem" => $memo, ":exTot" => $transfer]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
             from Transactions WHERE account_src = :src) where id = :src";
             $stmt = $db->prepare($query);
-            $stmt->execute([":src" => $destAcc]);
+            $stmt->execute([":src" => $destID]);
 
             $query = "UPDATE Transactions SET expected_total = (SELECT IFNULL(SUM(balance), 0) from Accounts WHERE id = :aid) where id = :id";
             $stmt = $db->prepare($query);
-            $stmt->execute(["aid" => $destAcc, "id" => $id]);
+            $stmt->execute(["aid" => $destID, "id" => $id]);
             //updates accounts table balance
             
             
@@ -128,12 +134,12 @@ if (isset($_POST["save"])) {
         <input type="number" name="transfer" id="transfer" value="<?php se("5"); ?>" />
     </div>
     <div class="mb-3">
-        <label for="destAcc" class="form-label">Destination Account</label>
-        <select id="destAcc" name="destAcc" class="form-control">
-            <?php foreach ($results as $al) : ?>
-                <option value="<?php se($al, 'id'); ?>"><?php se($al, 'account_number'); ?></option>
-            <?php endforeach; ?>
-        </select>
+        <label for="destName">Recipient's Last Name</label>
+        <input type="text" name="destName" id="destName" />
+    </div>
+    <div class="mb-3">
+        <label for="destAcc">Destination Account (Last 4 #s)</label>
+        <input type="number" name="destAcc" id="destAcc" value="<?php se("0000"); ?>" />
     </div>
     <div class="mb-3">
         <label for="memo">Memo</label>
