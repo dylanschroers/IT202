@@ -6,10 +6,14 @@ is_logged_in(true);
 if (isset($_POST["save"])) {
     $email = se($_POST, "email", null, false);
     $username = se($_POST, "username", null, false);
+    $firstName = se($_POST, "fstName", null, false);
+    $lastName = se($_POST, "lstName", null, false);
 
-    $params = [":email" => $email, ":username" => $username, ":id" => get_user_id()];
+    $params = [":email" => $email, ":username" => $username, ":id" => get_user_id(), 
+    ":fstName" => $firstName, "lstName" => $lastName];
     $db = getDB();
-    $stmt = $db->prepare("UPDATE Users set email = :email, username = :username where id = :id");
+    $stmt = $db->prepare("UPDATE Users set email = :email, username = :username, nameFirst = :fstName, nameLast = :lstName
+    where id = :id");
     try {
         $stmt->execute($params);
         flash("Profile saved", "success");
@@ -84,6 +88,14 @@ if (isset($_POST["save"])) {
 <?php
 $email = get_user_email();
 $username = get_username();
+
+$db = getDB();
+$query = "SELECT nameFirst, nameLast from Users WHERE id = :id";
+$stmt = $db->prepare($query);
+$stmt->execute(["id" => get_user_id()]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+$firstName = se($user, "nameFirst", 0, false);
+$lastName = se($user, "nameLast", 0, false);
 ?>
 <form method="POST" onsubmit="return validate(this);">
     <div class="mb-3">
@@ -93,6 +105,16 @@ $username = get_username();
     <div class="mb-3">
         <label for="username">Username</label>
         <input type="text" name="username" id="username" value="<?php se($username); ?>" />
+    </div>
+    <div class="mb-3">
+        <label for="fstName">First Name</label>
+        <input type="text" name="fstName" id="fstName" value="<?php se($firstName); ?>" />
+    </div>
+    <div class="mb-3">
+        <label for="lstName">Last Name</label>
+        <input type="text" name="lstName" id="lstName" value="<?php if(isset($lastName)) {
+            se($lastName);
+        }; ?>" />
     </div>
     <!-- DO NOT PRELOAD PASSWORD -->
     <div>Password Reset</div>
