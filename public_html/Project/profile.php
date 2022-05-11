@@ -8,6 +8,8 @@ if (isset($_POST["save"])) {
     $username = se($_POST, "username", null, false);
     $firstName = se($_POST, "fstName", null, false);
     $lastName = se($_POST, "lstName", null, false);
+    $visi = se($_POST, "visi", null, false);
+    
 
     $params = [":email" => $email, ":username" => $username, ":id" => get_user_id(), 
     ":fstName" => $firstName, "lstName" => $lastName];
@@ -48,6 +50,10 @@ if (isset($_POST["save"])) {
         flash("An unexpected error occurred, please try again", "danger");
         //echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
     }
+    //Updates users with the value of the pubic profile checkbox
+    $stmt = $db->prepare("UPDATE Users set visibility = :visi where id = :id");
+    $stmt->execute([":visi" => $visi, ":id" => get_user_id()]);
+
 
 
     //check/update password
@@ -112,9 +118,12 @@ $lastName = se($user, "nameLast", 0, false);
     </div>
     <div class="mb-3">
         <label for="lstName">Last Name</label>
-        <input type="text" name="lstName" id="lstName" value="<?php if(isset($lastName)) {
-            se($lastName);
-        }; ?>" />
+        <input type="text" name="lstName" id="lstName" value="<?php se($lastName); ?>" />
+    </div>
+    <div class="mb-3">
+        <label for="visi">Public Profile</label>
+        <input type="hidden" name="visi" id="visi" value=0 />
+        <input type="checkbox" name="visi" id="visi" value=1 />
     </div>
     <!-- DO NOT PRELOAD PASSWORD -->
     <div>Password Reset</div>
