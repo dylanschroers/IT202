@@ -21,7 +21,13 @@ if (isset($_POST["save"])) {
         $query = "UPDATE Accounts SET account_number = :account_number where id = :id";
         $stmt = $db->prepare($query);
         $stmt->execute([":id" => $id, ":account_number" => $account_number]);
-        //deposit
+        //Savings account APY
+        if ($accType == "Savings") {
+            $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
+            $stmt = $db->prepare($query);
+            $stmt->execute(["accNum" => $account_number, ":apy" => 0.07]);
+        }
+            //deposit
         $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :exTot)";
         $stmt = $db->prepare($query);
         $stmt->execute([":accSrc" => "-1", ":accDest" => $id, ":balC" => -1*$deposit, ":tranType" => "Deposit", ":exTot" => -1*$deposit]);
