@@ -4,6 +4,7 @@ is_logged_in(true);
 ?>
 <?php
 $db = getDB();
+$accOptions = ["Checking", "Savings"];
 if (isset($_POST["save"])) {
     $accType = se($_POST, "accType", null, false);
     $deposit = se($_POST, "deposit", null, false);
@@ -41,9 +42,15 @@ if (isset($_POST["save"])) {
 ?>
 
 <form method="POST" onsubmit="return validate(this);">
-    <div class="mb-3">
-        <label for="accType">Account Type</label>
-        <input type="text" name="accType" id="accType" value="<?php se("Checking"); ?>" />
+<div class="mb-3">
+        <label for="accType" class="form-label">Account Type</label>
+        <select id="accType" name="accType" class="form-control">
+            <?php foreach ($accOptions as $at) : ?>
+                <option> 
+                    <?php se($at, 'account_type'); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="mb-3">
         <label for="deposit">Deposit</label>
