@@ -16,17 +16,28 @@ if (isset($_POST["save"])) {
         $stmt = $db->prepare($query);
         $stmt->execute([":uid" => $user_id, ":accType" => $accType, ":bal" => $deposit]);
         
+        
         $id = $db->lastInsertId();
+
+        
         //this should mimic what's happening in the DB without requiring me to fetch the data
         $account_number = str_pad($id, 12, "0", STR_PAD_LEFT);
         $query = "UPDATE Accounts SET account_number = :account_number where id = :id";
         $stmt = $db->prepare($query);
         $stmt->execute([":id" => $id, ":account_number" => $account_number]);
+
+        
+
         //Savings account APY
         if ($accType == "Savings") {
             $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
             $stmt = $db->prepare($query);
             $stmt->execute(["accNum" => $account_number, ":apy" => 0.07]);
+        }
+        else if ($accType == "Checkings") {
+            $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
+            $stmt = $db->prepare($query);
+            $stmt->execute(["accNum" => $account_number, ":apy" => NULL]);
         }
             //deposit
         $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :exTot)";
