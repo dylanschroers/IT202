@@ -7,7 +7,7 @@ $db = getDB();
 
 
 try {
-    $stmt = $db->prepare("SELECT id, account_number, account_type from Accounts where user_id = :uid");
+    $stmt = $db->prepare("SELECT id, account_number, account_type from Accounts where user_id = :uid and is_active = 1");
     $stmt->execute([":uid" => get_user_id()]);
     $results = $stmt->fetchall(PDO::FETCH_ASSOC);
 
@@ -67,7 +67,7 @@ if (isset($_POST["save"])) {
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $destAcc, ":accDest" => $srcAcc, ":balC" => -$transfer, ":tranType" => "Internal Transfer", ":mem" => $memo, ":exTot" => $transfer]);
+            $stmt->execute([":accSrc" => $destAcc, ":accDest" => $srcAcc, ":balC" => $transfer, ":tranType" => "Internal Transfer", ":mem" => $memo, ":exTot" => $transfer]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
@@ -137,7 +137,7 @@ if (isset($_POST["save"])) {
         <input type="number" name="transfer" id="transfer" value="<?php se("5"); ?>" />
     </div>
     <div class="mb-3">
-        <label for="destAcc" class="form-label">Destination Account</label>
+        <label for="destAcc" class="form-label">Loan Account</label>
         <select id="destAcc" name="destAcc" class="form-control">
             <?php foreach ($loanAccs as $al) : ?>
                 <option value="<?php se($al, 'id'); ?>"><?php se($al, 'account_number'); ?></option>

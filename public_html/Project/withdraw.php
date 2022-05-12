@@ -5,7 +5,7 @@ is_logged_in(true);
 <?php
 $db = getDB();
 
-$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid");
+$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != 'Loan' and is_active = 1");
 try {
     $stmt->execute([":uid" => get_user_id()]);
     $results = $stmt->fetchall(PDO::FETCH_ASSOC);
