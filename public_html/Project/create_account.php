@@ -4,6 +4,7 @@ is_logged_in(true);
 ?>
 <?php
 $db = getDB();
+$accOptions = ["Checking", "Savings"];
 if (isset($_POST["save"])) {
     $accType = se($_POST, "accType", null, false);
     $deposit = se($_POST, "deposit", null, false);
@@ -15,13 +16,30 @@ if (isset($_POST["save"])) {
         $stmt = $db->prepare($query);
         $stmt->execute([":uid" => $user_id, ":accType" => $accType, ":bal" => $deposit]);
         
+        
         $id = $db->lastInsertId();
+
+        
         //this should mimic what's happening in the DB without requiring me to fetch the data
         $account_number = str_pad($id, 12, "0", STR_PAD_LEFT);
         $query = "UPDATE Accounts SET account_number = :account_number where id = :id";
         $stmt = $db->prepare($query);
         $stmt->execute([":id" => $id, ":account_number" => $account_number]);
-        //deposit
+
+        
+
+        //Savings account APY
+        if ($accType == "Savings") {
+            $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
+            $stmt = $db->prepare($query);
+            $stmt->execute(["accNum" => $account_number, ":apy" => 0.07]);
+        }
+        else if ($accType == "Checkings") {
+            $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
+            $stmt = $db->prepare($query);
+            $stmt->execute(["accNum" => $account_number, ":apy" => NULL]);
+        }
+            //deposit
         $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :exTot)";
         $stmt = $db->prepare($query);
         $stmt->execute([":accSrc" => "-1", ":accDest" => $id, ":balC" => -1*$deposit, ":tranType" => "Deposit", ":exTot" => -1*$deposit]);
@@ -41,9 +59,15 @@ if (isset($_POST["save"])) {
 ?>
 
 <form method="POST" onsubmit="return validate(this);">
-    <div class="mb-3">
-        <label for="accType">Account Type</label>
-        <input type="text" name="accType" id="accType" value="<?php se("Checking"); ?>" />
+<div class="mb-3">
+        <label for="accType" class="form-label">Account Type</label>
+        <select id="accType" name="accType" class="form-control">
+            <?php foreach ($accOptions as $at) : ?>
+                <option> 
+                    <?php se($at, 'account_type'); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
     </div>
     <div class="mb-3">
         <label for="deposit">Deposit</label>

@@ -13,6 +13,8 @@
 
  End Line item / Feature Template -- DO NOT DELETE THIS SECTION --> 
  
+- Project Showcase Video
+    - [https://youtu.be/ahDkmNRvBEw](https://youtu.be/ahDkmNRvBEw)
  
 ### Proposal Checklist and Evidence
 
@@ -46,20 +48,65 @@
     -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
     -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
 - Milestone 2
-  - [ ] \(mm/dd/yyyy) Create the Accounts table (id, account_number [unique, always 12 characters], user_id, balance (default 0), account_type, created, modified)
-  - [ ] \(mm/dd/yyyy) Create a system user if they don’t exist (this will never be logged into, it’s just to keep things working per system requirements)
-  - [ ] \(mm/dd/yyyy) Create a world account in the Accounts table created below (if it doesn’t exist)
-  - [ ] \(mm/dd/yyyy) Create the Transactions table
-  - [ ] \(mm/dd/yyyy) Dashboard page
-  - [ ] \(mm/dd/yyyy) User will be able to create a checking account
-  - [ ] \(mm/dd/yyyy) User will be able to list their accounts
-  - [ ] \(mm/dd/yyyy) User will be able to click an account for more information (a.k.a Transaction History page)
-  - [ ] \(mm/dd/yyyy) User will be able to deposit/withdraw from their account(s)
+    - [x] \(03/11/2022 of completion) User will be able to register a new account
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/register.php](https://djs28-dev.herokuapp.com/Project/register.php)
+    - [x] \(03/11/2022 of completion) User will be able to login to their account (given they enter the correct credentials)
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/login.php](https://djs28-dev.herokuapp.com/Project/login.php))
+    - [x] \(03/11/2022 of completion) User will be able to logout
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
+    - [x] \(4/4/2022 of completion) Basic security rules implemented
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
+    - [x] \(4/4/2022 of completion) Basic Roles implemented
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/create_role.php](https://djs28-dev.herokuapp.com/Project/admin/create_role.php)
+    - [x] \(4/4/2022 of completion) Site should have basic styles/theme applied; everything should be styled
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)-  
+    -  [https://djs28-dev.herokuapp.com/Project/home.php](https://djs28-dev.herokuapp.com/Project/home.php)
+    -  [https://djs28-dev.herokuapp.com/Project/styles.css](https://djs28-dev.herokuapp.com/Project/styles.css)
+    - [x] \(4/4/2022 of completion) Any output messages/errors should be “user friendly”
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/logout.php](https://djs28-dev.herokuapp.com/Project/logout.php)
+    - [x] \(4/4/2022 of completion) User will be able to see their profile
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
+    - [x] \(4/4/2022 of completion) User will be able to edit their profile
+    -  [Milestone 1](https://github.com/dylanschroers/IT202/blob/Milestone1/public_html/Project/milestone1.md)
+    -  [https://djs28-dev.herokuapp.com/Project/profile.php](https://djs28-dev.herokuapp.com/Project/profile.php)
 - Milestone 3
-  - (duplicate template here for Milestone 1 features)
+    - [x] \(5/2/2022 of completion) User will be able to transfer between their accounts
+    -  [Milestone 3](https://github.com/dylanschroers/IT202/blob/Milestone3/public_html/Project/milestone3.md)
+    -  [https://djs28-prod.herokuapp.com/Project//transfers.php](https://djs28-prod.herokuapp.com/Project//transfers.php)
+    - [x] \(5/2/2022 of completion) Transaction history page
+    -  [Milestone 3](https://github.com/dylanschroers/IT202/blob/Milestone3/public_html/Project/milestone3.md)
+    -  [https://djs28-prod.herokuapp.com/Project//get_accounts.php](https://djs28-prod.herokuapp.com/Project//get_accounts.php))
+    - [x] \(5/2/2022 of completion) User's profile page should recprd/show First and Last name
+    -  [Milestone 3](https://github.com/dylanschroers/IT202/blob/Milestone3/public_html/Project/milestone3.md)
+    -  [https://djs28-prod.herokuapp.com/Project//profile.php](https://djs28-prod.herokuapp.com/Project//profile.php)
+    - [x] \(5/2/2022 of completion) User will be able to transfer to another user's account
+    -  [Milestone 3](https://github.com/dylanschroers/IT202/blob/Milestone3/public_html/Project/milestone3.md)
+    -  [https://djs28-prod.herokuapp.com/Project//ext_transfers.php](https://djs28-prod.herokuapp.com/Project//ext_transfers.php)
 - Milestone 4
-  - (duplicate template here for Milestone 1 features)
-  - 
+    - [x] \(5/12/2022 of completion) User can set their profile to be public or private
+    -  [Milestone 4](https://github.com/dylanschroers/IT202/blob/Milestone4/public_html/Project/milestone4.md)
+    -  [https://djs28-prod.herokuapp.com/Project//profile.php](https://djs28-prod.herokuapp.com/Project//profile.php))
+    - [x] \(5/12/2022 of completion) User will be able to open a savings account 
+    -  [Milestone 4](https://github.com/dylanschroers/IT202/blob/Milestone4/public_html/Project/milestone4.md)
+    -  [https://djs28-prod.herokuapp.com/Project//create_account.php](https://djs28-prod.herokuapp.com/Project//create_account.php)
+    - [x] \(5/12/2022 of completion) User will be able to take out a loan
+    -  [Milestone 4](https://github.com/dylanschroers/IT202/blob/Milestone4/public_html/Project/milestone4.md)
+    -  [https://djs28-prod.herokuapp.com/Project//loans.php](https://djs28-prod.herokuapp.com/Project//loans.php)
+    -  [https://djs28-prod.herokuapp.com/Project//payLoan.php](https://djs28-prod.herokuapp.com/Project//payLoan.php)
+    - [x] \(5/12/2022 of completion) Listing account and/or viewing Account Details should show any applicable APY or "-" if none is set for the particular account
+    -  [Milestone 4](https://github.com/dylanschroers/IT202/blob/Milestone4/public_html/Project/milestone4.md)
+    -  [https://djs28-prod.herokuapp.com/Project//get_accounts.php](https://djs28-prod.herokuapp.com/Project//get_accounts.php))
+    - [x] \(5/12/2022 of completion) User will be able to close an account
+    -  [Milestone 4](https://github.com/dylanschroers/IT202/blob/Milestone4/public_html/Project/milestone4.md)
+    -  [https://djs28-prod.herokuapp.com/Project//close_accounts.php](https://djs28-prod.herokuapp.com/Project//close_accounts.php)
+    - [ ] \(mm/dd/yyy) Admin role
 ### Intructions
 #### Don't delete this
 1. Pick one project type
