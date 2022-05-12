@@ -29,10 +29,7 @@ if (isset($_POST["save"])) {
         $account = $stmt->fetch(PDO::FETCH_ASSOC);
         $b = (int)se($account, "balance", 0, false);
 
-        if ($b < $loan) {
-            flash("Cannot transfer more than the account holds");
-        }
-        else {
+        
             $id = $db->lastInsertId();
             //creates the loan account
             $query = "INSERT INTO Accounts (user_id, account_type, account_number, balance) VALUES (:uid, :accType, NULL, :bal)";
@@ -87,8 +84,9 @@ if (isset($_POST["save"])) {
 
             
 
-            flash("Your transfer was successful", "success");
-        }
+            flash("Your loan was created", "success");
+            die(header("Location: $BASE_PATH" . "/get_accounts.php"));
+        
     } catch (PDOException $e) {
         flash("An error occurred while transferring", "danger");
         error_log(var_export($e, true));

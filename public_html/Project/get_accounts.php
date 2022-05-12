@@ -5,13 +5,25 @@
     $db = getDB();
     //select fresh data from table
     $transferType = ["", "Deposit", "Withdraw", "Transfer", "External Transfer"];
-    $stmt = $db->prepare("SELECT account_number, account_type, modified, balance from Accounts where user_id = :uid and is_active = 1");
+    //$stmt = $db->prepare("SELECT account_number, account_type, modified, balance from Accounts where user_id = :uid and is_active = 1");
+    $stmt = $db->prepare("SELECT Accounts.account_number, account_type, Accounts.modified, balance, apy FROM Accounts
+    LEFT JOIN SysProp ON Accounts.account_number = SysProp.account_number
+    WHERE Accounts.user_id = :uid and is_active = 1
+    UNION
+    SELECT Accounts.account_number, account_type, Accounts.modified, balance, apy FROM Accounts
+    RIGHT JOIN SysProp ON Accounts.account_number = SysProp.account_number
+    WHERE Accounts.user_id = :uid and is_active = 1");
     try {
         $stmt->execute([":uid" => get_user_id()]);
         $accounts = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+
         for ($x = 0; $x <= 4; $x++) {
+            if ($accounts[$x]["account_type"] == "Loan") {
+                $accounts[$x]["balance"] = $accounts[$x]["balance"]*-1;
+            }
             $tableAcc[] = $accounts[$x];
-          }
+        }
     } catch (Exception $e) {
         error_log(var_export($e,true));
         flash("An unexpected error occurred, please try again", "danger");
@@ -87,7 +99,7 @@
                     <td><?php se($value, null, "N/A"); ?></td>
                 <?php endforeach; ?>
                 <td>
-                    <!-- other action buttons can go here-->
+                    
                 </td>
             </tr>
         <?php endforeach; ?>
