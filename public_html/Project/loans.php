@@ -6,9 +6,9 @@ is_logged_in(true);
 <?php
 $db = getDB();
 
-$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != :acctype");
+$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != 'Loan' and is_active = 1");
 try {
-    $stmt->execute([":uid" => get_user_id(), ":acctype" => "Loan"]);
+    $stmt->execute([":uid" => get_user_id()]);
     $results = $stmt->fetchall(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     error_log(var_export($e,true));
@@ -54,7 +54,7 @@ if (isset($_POST["save"])) {
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $account_number, ":accDest" => $destAcc, ":balC" => $loan*($apy+1), ":tranType" => "Loan", ":mem" => $memo]);
+            $stmt->execute([":accSrc" => $account_number, ":accDest" => $destAcc, ":balC" => -$loan*($apy+1), ":tranType" => "Loan", ":mem" => $memo]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
@@ -88,9 +88,6 @@ if (isset($_POST["save"])) {
             
 
             flash("Your transfer was successful", "success");
-            /*
-            die(header("Location: $BASE_PATH" . "/get_accounts.php"));
-            */
         }
     } catch (PDOException $e) {
         flash("An error occurred while transferring", "danger");

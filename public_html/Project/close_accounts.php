@@ -4,42 +4,43 @@ is_logged_in(true);
 ?>
 <?php
 $db = getDB();
-$accOptions = ["Checking", "Savings"];
+
+$stmt = $db->prepare("SELECT id, account_number, balance from Accounts where user_id = :uid and is_active = 1");
+try {
+    $stmt->execute([":uid" => get_user_id()]);
+    $accounts = $stmt->fetchall(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    error_log(var_export($e,true));
+    flash("An unexpected error occurred, please try again", "danger");
+}
+
 if (isset($_POST["save"])) {
-    $accType = se($_POST, "accType", null, false);
-    $deposit = se($_POST, "deposit", null, false);
+    $accNum = se($_POST, "accNum", null, false);
+
+    
 
     try {
-        //my table should automatically create the account number so I just need to assign the user
-        $query = "INSERT INTO Accounts (user_id, account_type, account_number, balance) VALUES (:uid, :accType, NULL, :bal)";
-        $user_id = get_user_id(); //caching a reference
+        $query = "SELECT balance from Accounts WHERE id = :aid";
         $stmt = $db->prepare($query);
-        $stmt->execute([":uid" => $user_id, ":accType" => $accType, ":bal" => $deposit]);
+        $stmt->execute(["aid" => $accNum]);
+        $account = $stmt->fetch(PDO::FETCH_ASSOC);
+        $b = (int)se($account, "balance", 0, false);
+        //my table should automatically create the account number so I just need to assign the user
         
         $id = $db->lastInsertId();
         //this should mimic what's happening in the DB without requiring me to fetch the data
-        $account_number = str_pad($id, 12, "0", STR_PAD_LEFT);
-        $query = "UPDATE Accounts SET account_number = :account_number where id = :id";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":id" => $id, ":account_number" => $account_number]);
-        //Savings account APY
-        if ($accType == "Savings") {
-            $query = "INSERT INTO SysProp (account_number, apy) VALUES (:accNum, :apy)";
+        if ($b <= 0) {
+            $query = "UPDATE Accounts SET is_active = 0 where account_number = :accNum";
             $stmt = $db->prepare($query);
-            $stmt->execute(["accNum" => $account_number, ":apy" => 0.07]);
+            $stmt->execute([":accNum" => $accNum]);    
+
+            flash("Your account has been successfully closed", "success");
         }
-            //deposit
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :exTot)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => "-1", ":accDest" => $id, ":balC" => -1*$deposit, ":tranType" => "Deposit", ":exTot" => -1*$deposit]);
-
-        $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, expected_total) VALUES (:accSrc, :accDest, :balC, :tranType, :exTot)";
-        $stmt = $db->prepare($query);
-        $stmt->execute([":accSrc" => $id, ":accDest" => '-1', ":balC" => $deposit, ":tranType" => "Deposit", ":exTot" => $deposit]);
+        else {
+            flash("Account must be empty before closing", "danger");
+        }
         
-        flash("Welcome! Your account has been created successfully", "success");
-        die(header("Location: $BASE_PATH" . "/get_accounts.php"));
-
+        
     } catch (PDOException $e) {
         flash("An error occurred while creating your account", "danger");
         error_log(var_export($e, true));
@@ -49,11 +50,11 @@ if (isset($_POST["save"])) {
 
 <form method="POST" onsubmit="return validate(this);">
 <div class="mb-3">
-        <label for="accType" class="form-label">Account Type</label>
-        <select id="accType" name="accType" class="form-control">
-            <?php foreach ($accOptions as $at) : ?>
+        <label for="accNum" class="form-label">Account</label>
+        <select id="accNum" name="accNum" class="form-control">
+            <?php foreach ($accounts as $al) : ?>
                 <option> 
-                    <?php se($at, 'account_type'); ?>
+                    <?php se($al, 'account_number'); ?>
                 </option>
             <?php endforeach; ?>
         </select>
@@ -63,25 +64,3 @@ if (isset($_POST["save"])) {
 <?php
 require_once(__DIR__ . "/../../partials/flash.php");
 ?>
-<script>
-    function validate(form) {
-        let accT = form.accType.value;
-        let dep = form.deposit.value;
-        let isValid = true;
-        //TODO add other client side validation....
-
-        //example of using flash via javascript
-        //find the flash container, create a new element, appendChild
-
-        if (!(accT)) {
-            flash("Account type must not be empty", "warning");
-            isValid = false;
-        }
-
-        if (!(dep >= 5)) {
-            flash("Deposit must be greater than 5", "warning");
-            isValid = false;
-        }
-        return isValid;
-    }
-</script>

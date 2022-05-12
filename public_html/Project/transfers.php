@@ -6,14 +6,13 @@ is_logged_in(true);
 <?php
 $db = getDB();
 
-$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != :acctype");
+$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != :acctype and is_active = 1");
 try {
     $stmt->execute([":uid" => get_user_id(), ":acctype" => "Loan"]);
     $results = $stmt->fetchall(PDO::FETCH_ASSOC);
 } catch (Exception $e) {
     error_log(var_export($e,true));
     flash("An unexpected error occurred, please try again", "danger");
-    //echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
 }
 
 if (isset($_POST["save"])) {

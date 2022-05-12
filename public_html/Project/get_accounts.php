@@ -5,10 +5,13 @@
     $db = getDB();
     //select fresh data from table
     $transferType = ["", "Deposit", "Withdraw", "Transfer", "External Transfer"];
-    $stmt = $db->prepare("SELECT account_number, account_type, modified, balance from Accounts where user_id = :uid LIMIT 5");
+    $stmt = $db->prepare("SELECT account_number, account_type, modified, balance from Accounts where user_id = :uid and is_active = 1");
     try {
         $stmt->execute([":uid" => get_user_id()]);
         $accounts = $stmt->fetchall(PDO::FETCH_ASSOC);
+        for ($x = 0; $x <= 4; $x++) {
+            $tableAcc[] = $accounts[$x];
+          }
     } catch (Exception $e) {
         error_log(var_export($e,true));
         flash("An unexpected error occurred, please try again", "danger");
@@ -71,7 +74,7 @@
     
 <?php else : ?>
     <table class="table">
-        <?php foreach ($accounts as $index => $record) : ?>
+        <?php foreach ($tableAcc as $index => $record) : ?>
                 <?php if ($index == 0) : ?>
                     <thead>
                     <?php foreach ($record as $column => $value) : ?>
