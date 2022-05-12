@@ -46,6 +46,7 @@ if (isset($_POST["save"])) {
             $id = $db->lastInsertId();
             //this should mimic what's happening in the DB without requiring me to fetch the data
             
+            //djs28
 
             //src account
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
@@ -63,7 +64,7 @@ if (isset($_POST["save"])) {
             $stmt = $db->prepare($query);
             $stmt->execute(["aid" => $srcAcc, "id" => $id]);
             
-            //dest account
+            //loan account
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
             $stmt = $db->prepare($query);
