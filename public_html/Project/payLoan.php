@@ -2,17 +2,27 @@
 require_once(__DIR__ . "/../../partials/nav.php");
 is_logged_in(true);
 ?>
-<li><a href="ext_transfers.php">External Transfer</a></li>
 <?php
 $db = getDB();
 
-$stmt = $db->prepare("SELECT id, account_number from Accounts where user_id = :uid and account_type != :acctype and is_active = 1");
+
 try {
-    $stmt->execute([":uid" => get_user_id(), ":acctype" => "Loan"]);
+    $stmt = $db->prepare("SELECT id, account_number, account_type from Accounts where user_id = :uid and is_active = 1");
+    $stmt->execute([":uid" => get_user_id()]);
     $results = $stmt->fetchall(PDO::FETCH_ASSOC);
+
+    foreach ($results as $al) :
+        if($al["account_type"] == "Loan") {
+            $loanAccs[] = $al;
+        }
+        else {
+            $moneyAccs[] = $al;
+        }
+    endforeach;
 } catch (Exception $e) {
     error_log(var_export($e,true));
     flash("An unexpected error occurred, please try again", "danger");
+    //echo "<pre>" . var_export($e->errorInfo, true) . "</pre>";
 }
 
 if (isset($_POST["save"])) {
@@ -36,12 +46,13 @@ if (isset($_POST["save"])) {
             $id = $db->lastInsertId();
             //this should mimic what's happening in the DB without requiring me to fetch the data
             
+            //djs28
 
             //src account
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, NULL)";
             $stmt = $db->prepare($query);
-            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destAcc, ":balC" => -1*$transfer, ":tranType" => "Internal Transfer", ":mem" => $memo]);
+            $stmt->execute([":accSrc" => $srcAcc, ":accDest" => $destAcc, ":balC" => -$transfer, ":tranType" => "Internal Transfer", ":mem" => $memo]);
             $id = $db->lastInsertId();
 
             $query = "UPDATE Accounts SET balance = (SELECT IFNULL(SUM(balance_change), 0) 
@@ -53,7 +64,7 @@ if (isset($_POST["save"])) {
             $stmt = $db->prepare($query);
             $stmt->execute(["aid" => $srcAcc, "id" => $id]);
             
-            //dest account
+            //loan account
             $query = "INSERT INTO Transactions (account_src, account_dest, balance_change, transaction_type, memo, expected_total) 
             VALUES (:accSrc, :accDest, :balC, :tranType, :mem, :exTot)";
             $stmt = $db->prepare($query);
@@ -117,7 +128,7 @@ if (isset($_POST["save"])) {
     <div class="mb-3">
         <label for="srcAcc" class="form-label">Source Account</label>
         <select id="srcAcc" name="srcAcc" class="form-control">
-            <?php foreach ($results as $al) : ?>
+            <?php foreach ($moneyAccs as $al) : ?>
                 <option value="<?php se($al, 'id'); ?>"><?php se($al, 'account_number'); ?></option>
             <?php endforeach; ?>
         </select>
@@ -127,9 +138,9 @@ if (isset($_POST["save"])) {
         <input type="number" name="transfer" id="transfer" value="<?php se("5"); ?>" />
     </div>
     <div class="mb-3">
-        <label for="destAcc" class="form-label">Destination Account</label>
+        <label for="destAcc" class="form-label">Loan Account</label>
         <select id="destAcc" name="destAcc" class="form-control">
-            <?php foreach ($results as $al) : ?>
+            <?php foreach ($loanAccs as $al) : ?>
                 <option value="<?php se($al, 'id'); ?>"><?php se($al, 'account_number'); ?></option>
             <?php endforeach; ?>
         </select>
@@ -138,7 +149,7 @@ if (isset($_POST["save"])) {
         <label for="memo">Memo</label>
         <input type="text" name="memo" id="memo" />
     </div>
-    <input type="submit" value="Transfer" name="save" />
+    <input type="submit" value="Pay Loan" name="save" />
 </form>
 <?php
 require_once(__DIR__ . "/../../partials/flash.php");
